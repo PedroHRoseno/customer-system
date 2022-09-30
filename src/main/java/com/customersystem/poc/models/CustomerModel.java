@@ -24,20 +24,16 @@ public class CustomerModel implements Serializable {
     @Column(nullable = false)
     private PersonType personType;
     @Column(nullable = false, unique = true, length = 14)
-    private int identifier;
+    private String identifier;
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
-    private String mainAdress;
-    @Column(nullable = false)
     private String phoneNumber;
 
-    public CustomerModel(PersonType personType, int identifier, String email, String mainAdress, String phoneNumber) {
-        this.id = id;
+    public CustomerModel(PersonType personType, String identifier, String email, String phoneNumber) {
         this.personType = personType;
         this.identifier = identifier;
         this.email = email;
-        this.mainAdress = mainAdress;
         this.phoneNumber = phoneNumber;
     }
 

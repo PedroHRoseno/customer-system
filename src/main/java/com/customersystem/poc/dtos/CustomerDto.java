@@ -10,22 +10,19 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class CustomerDto {
     @NotBlank
-    private PersonType personType;
+    private String personType;
     @NotBlank
     private String identifier;
     @NotBlank
     private String email;
     @NotBlank
-    private String mainAdress;
-    @NotBlank
     private String phoneNumber;
 
-    public CustomerDto(PersonType personType, String identifier, String email, String mainAdress, String phoneNumber) {
+    public CustomerDto(String personType, String identifier, String email, String phoneNumber) {
 
         this.personType = personType;
         this.identifier = identifier;
         this.email = email;
-        this.mainAdress = mainAdress;
         this.phoneNumber = phoneNumber;
     }
 }
