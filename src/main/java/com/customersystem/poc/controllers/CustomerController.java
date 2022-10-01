@@ -4,7 +4,6 @@ import com.customersystem.poc.dtos.CustomerDto;
 import com.customersystem.poc.models.CustomerModel;
 import com.customersystem.poc.models.enums.PersonType;
 import com.customersystem.poc.services.CustomerService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
