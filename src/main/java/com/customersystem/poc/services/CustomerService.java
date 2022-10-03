@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CustomerService {
@@ -16,5 +19,18 @@ public class CustomerService {
     @Transactional
     public CustomerModel save(CustomerModel customerModel) {
         return  customerRepository.save(customerModel);
+    }
+
+    public Optional<CustomerModel> findById(UUID id) {
+        return customerRepository.findById(id);
+    }
+
+    public List<CustomerModel> findAll() {
+        return customerRepository.findAll();
+    }
+
+    @Transactional
+    public void delete(CustomerModel customerModel) {
+        customerRepository.delete(customerModel);
     }
 }
