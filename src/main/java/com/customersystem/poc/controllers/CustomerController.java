@@ -5,6 +5,7 @@ import com.customersystem.poc.models.CustomerModel;
 import com.customersystem.poc.models.enums.PersonType;
 import com.customersystem.poc.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -35,8 +36,8 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.save(customerModel));
     }
     @GetMapping
-    public ResponseEntity<List<CustomerModel>> getAllCustomers(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll());
+    public ResponseEntity<Page<CustomerModel>> getAllCustomers(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll(pageable));
     }
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOneCustomer(@PathVariable(value = "id") UUID id){
