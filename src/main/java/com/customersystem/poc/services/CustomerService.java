@@ -27,6 +27,8 @@ public class CustomerService {
         return customerRepository.findById(id);
     }
 
+    public Optional<CustomerModel> findByIdentifier(String identifier)
+
     public Page<CustomerModel> findAll(Pageable pageable) {
         return customerRepository.findAll(pageable);
     }

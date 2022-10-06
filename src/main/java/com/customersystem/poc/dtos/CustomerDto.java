@@ -5,6 +5,7 @@ import lombok.Data;
 import org.aspectj.weaver.ast.Not;
 
 import javax.persistence.Persistence;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Data
@@ -14,6 +15,7 @@ public class CustomerDto {
     @NotBlank
     private String identifier;
     @NotBlank
+    @Email
     private String email;
     @NotBlank
     private String phoneNumber;

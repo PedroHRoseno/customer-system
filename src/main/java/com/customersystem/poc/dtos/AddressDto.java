@@ -26,13 +26,17 @@ public class AddressDto {
     @NotBlank
     private String state;
 
-    public AddressDto(String streetName, String number, String district, String city, String postalCode, String state) {
+    @NotBlank
+    private String customerIdentifier;
+
+    public AddressDto(String streetName, String number, String district, String city, String postalCode, String state, String identifier) {
         this.streetName = streetName;
         this.number = number;
         this.district = district;
         this.city = city;
         this.postalCode = postalCode;
         this.state = state;
+        this.customerIdentifier = identifier;
     }
 
 

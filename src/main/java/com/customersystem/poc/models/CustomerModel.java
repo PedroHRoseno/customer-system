@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class CustomerModel implements Serializable {
     @Column(nullable = false, unique = true, length = 14)
     private String identifier;
     @Column(nullable = false)
+    @Email
     private String email;
     @Column(nullable = false)
     private String phoneNumber;
