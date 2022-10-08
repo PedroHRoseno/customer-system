@@ -5,7 +5,6 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -27,10 +26,12 @@ public class CustomerModel implements Serializable {
     @Column(nullable = false, unique = true, length = 14)
     private String identifier;
     @Column(nullable = false)
-    @Email
     private String email;
     @Column(nullable = false)
     private String phoneNumber;
+
+    @Column
+    private int AddressCount;
 
     public CustomerModel(PersonType personType, String identifier, String email, String phoneNumber) {
         this.personType = personType;
@@ -44,7 +45,7 @@ public class CustomerModel implements Serializable {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         CustomerModel that = (CustomerModel) o;
-        return id != null && Objects.equals(identifier, that.identifier);
+        return id != null && Objects.equals(id, that.id);
     }
 
     @Override

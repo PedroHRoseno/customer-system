@@ -3,6 +3,7 @@ package com.customersystem.poc.controllers;
 import com.customersystem.poc.dtos.CustomerDto;
 import com.customersystem.poc.models.CustomerModel;
 import com.customersystem.poc.models.enums.PersonType;
+import com.customersystem.poc.services.AddressService;
 import com.customersystem.poc.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,23 +26,34 @@ public class CustomerController {
 
     @Autowired
     CustomerService customerService;
+    @Autowired
+    AddressService addressService;
 
     @PostMapping
     public ResponseEntity<Object> saveCustomer(@RequestBody @Valid CustomerDto customerDto){
+        if(customerService.existsByIdentifier(customerDto.getIdentifier())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Identifier already in use");
+        }
+        customerService.validateEmail(customerDto.getEmail());
         CustomerModel customerModel = new CustomerModel(PersonType.valueOf(customerDto.getPersonType()),
                 customerDto.getIdentifier(),
                 customerDto.getEmail(),
                 customerDto.getPhoneNumber());
-
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.save(customerModel));
     }
     @GetMapping
     public ResponseEntity<Page<CustomerModel>> getAllCustomers(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findAll(pageable));
     }
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Object> getOneCustomer(@PathVariable(value = "id") UUID id){
         Optional<CustomerModel> customerModelOptional = customerService.findById(id);
+        return customerModelOptional.<ResponseEntity<Object>>map(customerModel -> ResponseEntity.status(HttpStatus.OK).body(customerModel)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found!!!"));
+    }
+
+    @GetMapping("/identifier/{identifier}")
+    public ResponseEntity<Object> getOneCustomerByIdentifier(@PathVariable(value = "identifier") String identifier){
+        Optional<CustomerModel> customerModelOptional = customerService.findByIdentifier(identifier );
         return customerModelOptional.<ResponseEntity<Object>>map(customerModel -> ResponseEntity.status(HttpStatus.OK).body(customerModel)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found!!!"));
     }
 
