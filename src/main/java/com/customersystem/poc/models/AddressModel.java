@@ -46,7 +46,10 @@ public class AddressModel implements Serializable {
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerModel customer;
 
-    public AddressModel(String streetName, String number, String district, String city, String postalCode, String state, @NotBlank CustomerModel customer) {
+    @Column(nullable = false)
+    private boolean isMainAddress;
+
+    public AddressModel(String streetName, String number, String district, String city, String postalCode, String state, @NotBlank CustomerModel customer, @NotBlank Boolean isMainAddress) {
         this.streetName = streetName;
         this.number = number;
         this.district = district;
@@ -54,6 +57,7 @@ public class AddressModel implements Serializable {
         this.postalCode = postalCode;
         this.state = state;
         this.customer = customer;
+        this.isMainAddress = isMainAddress;
     }
 
     @Override
@@ -65,6 +69,6 @@ public class AddressModel implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, streetName, number, district, city, postalCode, state, customer);
+        return Objects.hash(id, streetName, number, district, city, postalCode, state, customer, isMainAddress);
     }
 }

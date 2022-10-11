@@ -1,10 +1,8 @@
 package com.customersystem.poc.controllers;
 
 import com.customersystem.poc.dtos.AddressDto;
-import com.customersystem.poc.dtos.CustomerDto;
 import com.customersystem.poc.models.AddressModel;
 import com.customersystem.poc.models.CustomerModel;
-import com.customersystem.poc.models.enums.PersonType;
 import com.customersystem.poc.services.AddressService;
 import com.customersystem.poc.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +42,10 @@ public class AddressController {
                 addressDto.getCity(),
                 addressDto.getPostalCode(),
                 addressDto.getState(),
-                customerModel.get()
+                customerModel.get(),
+                addressDto.isMainAddress()
         );
-        return ResponseEntity.status(HttpStatus.CREATED).body(addressService.save(addressModel));
+        return ResponseEntity.status(HttpStatus.CREATED).body(addressService.saveAddress(addressModel));
     }
 
     @GetMapping

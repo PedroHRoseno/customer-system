@@ -29,9 +29,9 @@ public class CustomerModel implements Serializable {
     private String email;
     @Column(nullable = false)
     private String phoneNumber;
-
+    
     @Column
-    private int AddressCount;
+    private int AddressCount = 0;
 
     public CustomerModel(PersonType personType, String identifier, String email, String phoneNumber) {
         this.personType = personType;

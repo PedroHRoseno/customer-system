@@ -1,6 +1,9 @@
 package com.customersystem.poc.services;
 
+import com.customersystem.poc.exceptions.BadRequestException;
+import com.customersystem.poc.exceptions.NotFoundException;
 import com.customersystem.poc.models.AddressModel;
+import com.customersystem.poc.models.CustomerModel;
 import com.customersystem.poc.repositories.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +19,9 @@ public class AddressService {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private CustomerService customerService;
 
     @Transactional
     public AddressModel save(AddressModel addressModel) {
@@ -33,5 +39,25 @@ public class AddressService {
     @Transactional
     public void delete(AddressModel addressModel) {
         addressRepository.delete(addressModel);
+    }
+
+    public AddressModel saveAddress(AddressModel addressModel){
+        Optional<CustomerModel> customer = customerService.findById(addressModel.getCustomer().getId());
+        validateIfCustomerExists(customer);
+        validateMaxAddressToACustomer(customer.get());
+        customerService.incrementAddressCount(customer.get());
+        return this.save(addressModel);
+    }
+
+    public void validateMaxAddressToACustomer(CustomerModel customerModel){
+        if (customerModel.getAddressCount() >= 5){
+         throw new BadRequestException("limit of registered Addresses reached");
+        }
+    }
+
+    public void validateIfCustomerExists(Optional<CustomerModel> customer){
+        if (customer.isEmpty()){
+            throw new NotFoundException("Customer not found");
+        }
     }
 }

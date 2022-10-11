@@ -26,7 +26,7 @@ public class CustomerDto {
     private String email;
     @NotBlank
     private String phoneNumber;
-    @NotBlank
+
     private AddressDto addressDto;
 
 }

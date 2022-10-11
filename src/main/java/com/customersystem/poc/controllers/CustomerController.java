@@ -31,15 +31,8 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<Object> saveCustomer(@RequestBody @Valid CustomerDto customerDto){
-        if(customerService.existsByIdentifier(customerDto.getIdentifier())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Identifier already in use");
-        }
-        customerService.validateEmail(customerDto.getEmail());
-        CustomerModel customerModel = new CustomerModel(PersonType.valueOf(customerDto.getPersonType()),
-                customerDto.getIdentifier(),
-                customerDto.getEmail(),
-                customerDto.getPhoneNumber());
-        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.save(customerModel));
+        customerService.validateToPost(customerDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.save(customerService.fillValuesInModel(customerDto, "POST")));
     }
     @GetMapping
     public ResponseEntity<Page<CustomerModel>> getAllCustomers(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)Pageable pageable){
@@ -69,16 +62,10 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateCustomer (@PathVariable(value = "id")  UUID id, @RequestBody @Valid CustomerDto customerDto){
-        Optional<CustomerModel> customerModelOptional = customerService.findById(id);
-        if(customerModelOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found.");
-        }
-        CustomerModel customerModel = new CustomerModel(PersonType.valueOf(customerDto.getPersonType()),
-                customerDto.getIdentifier(),
-                customerDto.getEmail(),
-                customerDto.getPhoneNumber());
-        customerModel.setId(customerModelOptional.get().getId());
-        return ResponseEntity.status(HttpStatus.OK).body(customerService.save(customerModel));
+
+        customerService.validateToUpdate(customerDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.save(customerService.fillValuesInModel(customerDto, "PUT")));
     }
 
 }
