@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,8 +50,8 @@ public class AddressController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<AddressModel>> getALlAdresses(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(addressService.findAll(pageable));
+    public ResponseEntity<Page<AddressModel>> getALlAdresses(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, @RequestParam(required = false) UUID id){
+        return ResponseEntity.status(HttpStatus.OK).body(addressService.findAll(id, pageable));
     }
 
     @GetMapping("/{id}")

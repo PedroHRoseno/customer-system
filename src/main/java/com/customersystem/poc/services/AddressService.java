@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,7 +30,10 @@ public class AddressService {
         return addressRepository.save(addressModel);
     }
 
-    public Page<AddressModel> findAll(Pageable pageable) {
+    public Page<AddressModel> findAll(UUID id, Pageable pageable) {
+        if (!(null == id)){
+            return addressRepository.findByCustomer(id, pageable);
+        }
         return addressRepository.findAll(pageable);
     }
 
@@ -59,5 +64,9 @@ public class AddressService {
         if (customer.isEmpty()){
             throw new NotFoundException("Customer not found");
         }
+    }
+
+    public void validateMainAddress(AddressModel addressModel){
+
     }
 }
