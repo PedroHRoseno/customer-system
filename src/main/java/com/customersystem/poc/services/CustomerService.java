@@ -97,4 +97,8 @@ public class CustomerService {
         this.save(customerModel);
     }
 
+    public void decrementAddressCount(CustomerModel customerModel) {
+        customerModel.setAddressCount(customerModel.getAddressCount() - 1);
+        this.save(customerModel);
+    }
 }

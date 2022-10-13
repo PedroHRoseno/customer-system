@@ -1,8 +1,8 @@
 package com.customersystem.poc.controllers;
 
 import com.customersystem.poc.dtos.CustomerDto;
+import com.customersystem.poc.models.AddressModel;
 import com.customersystem.poc.models.CustomerModel;
-import com.customersystem.poc.models.enums.PersonType;
 import com.customersystem.poc.services.AddressService;
 import com.customersystem.poc.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -48,6 +47,11 @@ public class CustomerController {
     public ResponseEntity<Object> getOneCustomerByIdentifier(@PathVariable(value = "identifier") String identifier){
         Optional<CustomerModel> customerModelOptional = customerService.findByIdentifier(identifier );
         return customerModelOptional.<ResponseEntity<Object>>map(customerModel -> ResponseEntity.status(HttpStatus.OK).body(customerModel)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found!!!"));
+    }
+    @GetMapping("/main/{id}")
+    public ResponseEntity<Object> getMainAddress(@PathVariable(value = "id") UUID id){
+        AddressModel mainAddress = addressService.findMainAddress(id);
+        return ResponseEntity.status(HttpStatus.OK).body(mainAddress);
     }
 
     @DeleteMapping

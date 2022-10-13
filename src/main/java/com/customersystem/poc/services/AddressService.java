@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -44,12 +42,14 @@ public class AddressService {
     @Transactional
     public void delete(AddressModel addressModel) {
         addressRepository.delete(addressModel);
+        customerService.decrementAddressCount(addressModel.getCustomer());
     }
 
     public AddressModel saveAddress(AddressModel addressModel){
         Optional<CustomerModel> customer = customerService.findById(addressModel.getCustomer().getId());
         validateIfCustomerExists(customer);
         validateMaxAddressToACustomer(customer.get());
+        addressModel = validateMainAddress(addressModel);
         customerService.incrementAddressCount(customer.get());
         return this.save(addressModel);
     }
@@ -66,7 +66,20 @@ public class AddressService {
         }
     }
 
-    public void validateMainAddress(AddressModel addressModel){
-
+    public AddressModel validateMainAddress(AddressModel addressModel){
+        var existsAMainAddress = this.findMainAddress(addressModel.getCustomer().getId());
+        if (addressModel.isMainAddress()){
+            addressRepository.unmarkMainAddress(addressModel.getCustomer().getId());
+        } else if (existsAMainAddress == null) {
+            addressModel.setMainAddress(true);
+        }
+        return addressModel;
+    }
+    public AddressModel findMainAddress(UUID id){
+        Optional<AddressModel> findMainAddress = addressRepository.findIsMainAddress(id);
+        if (findMainAddress.isEmpty()){
+            throw new NotFoundException("Main Address not found");
+        }
+        return findMainAddress.get();
     }
 }
