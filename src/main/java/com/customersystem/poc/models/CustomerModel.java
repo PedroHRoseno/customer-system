@@ -25,6 +25,9 @@ public class CustomerModel implements Serializable {
     private PersonType personType;
     @Column(nullable = false, unique = true, length = 14)
     private String identifier;
+
+    @Column(nullable = false)
+    private String name;
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
@@ -33,9 +36,10 @@ public class CustomerModel implements Serializable {
     @Column
     private int AddressCount = 0;
 
-    public CustomerModel(PersonType personType, String identifier, String email, String phoneNumber) {
+    public CustomerModel(PersonType personType, String identifier, String name, String email, String phoneNumber) {
         this.personType = personType;
         this.identifier = identifier;
+        this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
     }

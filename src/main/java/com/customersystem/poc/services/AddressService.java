@@ -45,9 +45,9 @@ public class AddressService {
         customerService.decrementAddressCount(addressModel.getCustomer());
     }
 
-    public AddressModel saveAddress(AddressModel addressModel){
+    public AddressModel validateAndSaveAddress(AddressModel addressModel){
         Optional<CustomerModel> customer = customerService.findById(addressModel.getCustomer().getId());
-        validateIfCustomerExists(customer);
+        validateIfCustomerExists(customer.get());
         validateMaxAddressToACustomer(customer.get());
         addressModel = validateMainAddress(addressModel);
         customerService.incrementAddressCount(customer.get());
@@ -60,8 +60,8 @@ public class AddressService {
         }
     }
 
-    public void validateIfCustomerExists(Optional<CustomerModel> customer){
-        if (customer.isEmpty()){
+    public void validateIfCustomerExists(CustomerModel customer){
+        if (customer == null){
             throw new NotFoundException("Customer not found");
         }
     }

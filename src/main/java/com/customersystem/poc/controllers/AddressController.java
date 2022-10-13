@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,7 +45,7 @@ public class AddressController {
                 customerModel.get(),
                 addressDto.isMainAddress()
         );
-        return ResponseEntity.status(HttpStatus.CREATED).body(addressService.saveAddress(addressModel));
+        return ResponseEntity.status(HttpStatus.CREATED).body(addressService.validateAndSaveAddress(addressModel));
     }
 
     @GetMapping

@@ -30,9 +30,7 @@ public class CustomerService {
         return customerRepository.findById(id);
     }
 
-    public Optional<CustomerModel> findByIdentifier(String identifier){
-        return customerRepository.findByIdentifier(identifier);
-    }
+    public Optional<CustomerModel> findByIdentifier(String identifier){ return customerRepository.findByIdentifier(identifier); }
 
     public Page<CustomerModel> findAll(Pageable pageable) {
         return customerRepository.findAll(pageable);
@@ -45,6 +43,7 @@ public class CustomerService {
     public CustomerModel fillValuesInModel(CustomerDto customerDto, String method){
         CustomerModel customerModel = new CustomerModel(PersonType.valueOf(customerDto.getPersonType()),
                 customerDto.getIdentifier(),
+                customerDto.getName(),
                 customerDto.getEmail(),
                 customerDto.getPhoneNumber());
         if (method.equals("PUT")){

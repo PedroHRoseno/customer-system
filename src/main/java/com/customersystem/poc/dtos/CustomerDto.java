@@ -21,9 +21,14 @@ public class CustomerDto {
     private String personType;
     @NotBlank
     private String identifier;
+
+    @NotBlank
+    private String name;
+
     @NotBlank
     @Email
     private String email;
+
     @NotBlank
     private String phoneNumber;
 

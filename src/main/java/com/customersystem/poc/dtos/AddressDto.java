@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
@@ -29,6 +30,7 @@ public class AddressDto {
     @NotBlank
     private String city;
 
+    @Length(max = 8, min = 8)
     @NotBlank
     private String postalCode;
 
