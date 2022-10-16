@@ -52,7 +52,10 @@ public class CustomerController {
     @GetMapping("/main/{id}")
     public ResponseEntity<Object> getMainAddress(@PathVariable(value = "id") UUID id){
         AddressModel mainAddress = addressService.findMainAddress(id);
-        return ResponseEntity.status(HttpStatus.OK).body(mainAddress);
+        if (mainAddress != null){
+            return ResponseEntity.status(HttpStatus.OK).body(mainAddress);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Main address not found");
     }
 
     @DeleteMapping

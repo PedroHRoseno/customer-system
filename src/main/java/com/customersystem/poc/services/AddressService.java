@@ -9,8 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
+import javax.print.DocFlavor;
 import javax.transaction.Transactional;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,6 +30,9 @@ public class AddressService {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private PostalCodeExternalApiService postalCodeExternalApiService;
 
     @Transactional
     public AddressModel save(AddressModel addressModel) {
@@ -50,8 +61,18 @@ public class AddressService {
         validateIfCustomerExists(customer.get());
         validateMaxAddressToACustomer(customer.get());
         addressModel = validateMainAddress(addressModel);
+        validatePostalCode(addressModel.getPostalCode());
         customerService.incrementAddressCount(customer.get());
         return this.save(addressModel);
+    }
+
+    private void validatePostalCode(String postalCode){
+        Mono<String> response = postalCodeExternalApiService.getPostalCode(postalCode);
+        String valueFromMono = response.block();
+        assert valueFromMono != null;
+        if(valueFromMono.contains("erro")){
+            throw new BadRequestException("Invalid postal code");
+        }
     }
 
     public void validateMaxAddressToACustomer(CustomerModel customerModel){
@@ -78,7 +99,7 @@ public class AddressService {
     public AddressModel findMainAddress(UUID id){
         Optional<AddressModel> findMainAddress = addressRepository.findIsMainAddress(id);
         if (findMainAddress.isEmpty()){
-            throw new NotFoundException("Main Address not found");
+            return null;
         }
         return findMainAddress.get();
     }
