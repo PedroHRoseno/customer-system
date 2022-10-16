@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -68,7 +69,6 @@ public class CustomerController {
     public ResponseEntity<Object> updateCustomer (@PathVariable(value = "id")  UUID id, @RequestBody @Valid CustomerDto customerDto){
 
         customerService.validateToUpdate(customerDto);
-
         return ResponseEntity.status(HttpStatus.OK).body(customerService.save(customerService.fillValuesInModel(customerDto, "PUT")));
     }
 
